@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import React, { useEffect } from 'react';
-import { signIn, useSession } from 'next-auth/react';
+import { getProviders, signIn, useSession } from 'next-auth/react';
 import { useForm } from 'react-hook-form';
 import Layout from '../components/Layout';
 import { getError } from '../utils/error';
@@ -24,6 +24,7 @@ export default function LoginScreen() {
     register,
     formState: { errors },
   } = useForm();
+
   const submitHandler = async ({ email, password }) => {
     try {
       const result = await signIn('credentials', {
@@ -38,11 +39,12 @@ export default function LoginScreen() {
       toast.error(getError(err));
     }
   };
+
   return (
     <Layout title="Login">
       <form
         className="mx-auto max-w-screen-md"
-        onSubmit={handleSubmit(submitHandler)}
+      // onSubmit={handleSubmit(submitHandler)}
       >
         <h1 className="mb-4 text-xl">Login</h1>
         <div className="mb-4">
@@ -81,13 +83,28 @@ export default function LoginScreen() {
           )}
         </div>
         <div className="mb-4 ">
-          <button className="primary-button">Login</button>
-        </div>
-        <div className="mb-4 ">
-          Don&apos;t have an account? &nbsp;
-          <Link href={`/register?redirect=${redirect || '/'}`}>Register</Link>
+          <button className="primary-button"
+            onClick={handleSubmit(submitHandler)}
+          > Login </button>
         </div>
       </form>
+      <p >
+        Get started by signing in   {"       "}
+        {/* <code >with your Google Account</code> */}
+        <button
+          onClick={signIn(provider.id)}
+        // onClick={() => router.push('/Login')}
+        >
+          <img src="/glog.png"
+          />
+        </button>
+      </p>
+
+      <div className="mb-4 ">
+        Don&apos;t have an account? &nbsp;
+        <Link href={`/register?redirect=${redirect || '/'}`}>Register</Link>
+      </div>
+
     </Layout>
   );
 }
