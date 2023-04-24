@@ -6,6 +6,7 @@ import Layout from '../components/Layout';
 import { getError } from '../utils/error';
 import { toast } from 'react-toastify';
 import { useRouter } from 'next/router';
+import Google from 'next-auth/providers/google';
 
 export default function LoginScreen() {
   const { data: session } = useSession();
@@ -39,10 +40,19 @@ export default function LoginScreen() {
       toast.error(getError(err));
     }
   };
+  const handleGoogleSignIn = async () => {
+    try {
+      const providers = await getProviders();
+      const googleProvider = providers['google'];
+      await signIn(googleProvider.id, { callbackUrl: '/' });
+    } catch (err) {
+      toast.error(getError(err));
+    }
+  };
 
   return (
     <Layout title="Login">
-      <form
+      {/* <form
         className="mx-auto max-w-screen-md"
       // onSubmit={handleSubmit(submitHandler)}
       >
@@ -87,12 +97,13 @@ export default function LoginScreen() {
             onClick={handleSubmit(submitHandler)}
           > Login </button>
         </div>
-      </form>
+      </form> */}
       <p >
+
         Get started by signing in   {"       "}
         {/* <code >with your Google Account</code> */}
         <button
-        // onClick={signIn(provider.id)}
+          onClick={handleGoogleSignIn}
         // onClick={() => router.push('/Login')}
         >
           <img src="/glog.png"
