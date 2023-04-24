@@ -92,7 +92,7 @@ export default function LoginScreen() {
         Get started by signing in   {"       "}
         {/* <code >with your Google Account</code> */}
         <button
-          onClick={signIn(provider.id)}
+        // onClick={signIn(provider.id)}
         // onClick={() => router.push('/Login')}
         >
           <img src="/glog.png"

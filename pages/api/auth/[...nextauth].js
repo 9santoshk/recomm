@@ -3,6 +3,10 @@ import NextAuth from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
 import User from '../../../models/User';
 import db from '../../../utils/db';
+// import { NextApiRequest, NextApiResponse } from "next";
+// import { authorize } from "@liveblocks/node";
+import GoogleProvider from "next-auth/providers/google";
+// import { Session } from "next-auth";
 
 export default NextAuth({
   session: {
@@ -38,6 +42,17 @@ export default NextAuth({
           };
         }
         throw new Error('Invalid email or password');
+      },
+    }),
+    GoogleProvider({
+      clientId: process.env.GOOGLE_CLIENT_ID,
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+      authorization: {
+        params: {
+          prompt: "consent",
+          access_type: "offline",
+          response_type: "code",
+        },
       },
     }),
   ],
