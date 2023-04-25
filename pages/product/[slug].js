@@ -8,6 +8,9 @@ import Layout from '../../components/Layout';
 import Product from '../../models/Product';
 import db from '../../utils/db';
 import { Store } from '../../utils/Store';
+import IoChevronBackOutline from 'react-icons/io'
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import Rating from 'react-star-rating-component';
 
 export default function ProductScreen(props) {
   const { product } = props;
@@ -33,7 +36,12 @@ export default function ProductScreen(props) {
   return (
     <Layout title={product.name}>
       <div className="py-2">
-        <Link href="/">back to products</Link>
+        <Link href="/" legacyBehavior={true}>
+          <a className="flex items-center">
+            <ArrowBackIcon />
+            <span className="ml-1">Back to products</span>
+          </a>
+        </Link>
       </div>
       <div className="grid md:grid-cols-4 md:gap-3">
         <div className="md:col-span-2">
@@ -58,6 +66,13 @@ export default function ProductScreen(props) {
             <li>Brand: {product.brand}</li>
             <li>
               {product.rating} of {product.numReviews} reviews
+              <Rating
+                value={product.rating}
+                // onStarClick={(nextValue, prevValue, name) => handleStarClick(nextValue, prevValue, name)}
+                starCount={5}
+                starColor={'#ffb400'}
+                emptyStarColor={'#ccc'}
+              />
             </li>
             <li>Description: {product.description}</li>
           </ul>

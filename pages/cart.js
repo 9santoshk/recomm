@@ -2,8 +2,8 @@ import Image from 'next/image';
 import Link from 'next/link';
 import React, { useContext } from 'react';
 import { XCircleIcon } from '@heroicons/react/outline';
-import RxCrossCircled from 'react-icons/rx'
-import AiOutlineCloseCircle from 'react-icons/ai'
+// import RxCrossCircled from 'react-icons/rx'
+// import AiOutlineCloseCircle from 'react-icons/ai'
 import Layout from '../components/Layout';
 import { Store } from '../utils/Store';
 import { useRouter } from 'next/router';
