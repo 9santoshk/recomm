@@ -4,8 +4,8 @@ import { useContext } from 'react';
 import { toast } from 'react-toastify';
 import Layout from '../components/Layout';
 import { Store } from '../utils/Store';
-// import XCircleIcon from '@heroicons/react/24/outline/XCircleIcon';
-import AiOutlineSearch from 'react-icons/ai'
+import { XCircleIcon } from '@heroicons/react/outline';
+// import AiOutlineSearch from 'react-icons/ai'
 import ProductItem from '../components/ProductItem';
 import Product from '../models/Product';
 import db from '../utils/db';
@@ -63,8 +63,11 @@ export default function Search(props) {
     if (brand) query.brand = brand;
     if (price) query.price = price;
     if (rating) query.rating = rating;
-    if (min) query.min ? query.min : query.min === 0 ? 0 : min;
-    if (max) query.max ? query.max : query.max === 0 ? 0 : max;
+    if (min) query.min = query.min ? query.min : query.min === 0 ? 0 : min;
+    if (max) query.max = query.max ? query.max : query.max === 0 ? 0 : max;
+
+    // if (min) query.min ? query.min : query.min === 0 ? 0 : min;
+    // if (max) query.max ? query.max : query.max === 0 ? 0 : max;
 
     router.push({
       pathname: router.pathname,
@@ -175,8 +178,8 @@ export default function Search(props) {
                 rating !== 'all' ||
                 price !== 'all' ? (
                 <button onClick={() => router.push('/search')}>
-                  {/* <XCircleIcon className="h-5 w-5" /> */}
-                  <AiOutlineSearch className="h-5 w-5" />
+                  <XCircleIcon className="h-5 w-5" />
+                  {/* <AiOutlineSearch className="h-5 w-5" /> */}
                 </button>
               ) : null}
             </div>

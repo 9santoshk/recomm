@@ -1,6 +1,7 @@
 import { signOut, useSession } from 'next-auth/react';
 import Head from 'next/head';
 import Link from 'next/link';
+import { Button, Drawer } from 'antd';
 import Cookies from 'js-cookie';
 import React, { useContext, useEffect, useState } from 'react';
 import { toast, ToastContainer } from 'react-toastify';
@@ -11,10 +12,8 @@ import DropdownLink from './DropdownLink';
 import { useRouter } from 'next/router';
 // import SearchIcon from '@heroicons/react/24/outline/MagnifyingGlassIcon';
 import { AiOutlineSearch, AiOutlineMenu, AiOutlineAntDesign, AiOutlineShoppingCart } from 'react-icons/ai'
-import { BsSearch } from 'react-icons/bs'
 import axios from 'axios';
 import { getError } from '../utils/error';
-
 
 export default function Layout({ title, children }) {
   const { status, data: session } = useSession();
@@ -22,13 +21,17 @@ export default function Layout({ title, children }) {
   const { state, dispatch } = useContext(Store);
   const { cart } = state;
   const [cartItemsCount, setCartItemsCount] = useState(0);
-  const [showSidebar, setShowSidebar] = useState(false);
-  const [isOpen, setIsOpen] = useState(false);
+  const [isDrawerVisible, setIsDrawerVisible] = useState(false); // Add state to manage drawer visibility
   const router = useRouter();
 
-  const toggle = () => {
-    setIsOpen(!isOpen);
-  };
+
+  const showDrawer = () => {
+    setIsDrawerVisible(true);
+  }; // Function to show the drawer
+
+  const onClose = () => {
+    setIsDrawerVisible(false);
+  }; // Function to hide the drawer
 
   useEffect(() => {
     setCartItemsCount(cart.cartItems.reduce((a, c) => a + c.quantity, 0));
@@ -51,16 +54,44 @@ export default function Layout({ title, children }) {
     fetchCategories();
   }, []);
 
-
   const [categories, setCategories] = useState([]);
 
   const fetchCategories = async () => {
     try {
       const { data } = await axios.get(`/api/products/categories`);
       setCategories(data);
+      console.log(data)
     } catch (err) {
       toast.error(getError(err));
     }
+  };
+
+
+  const ToggleButton = () => {
+    // console.log(categories)
+    return (
+      <div>
+        <AiOutlineMenu onClick={showDrawer} style={{ fontSize: "24px", color: "blue" }} />
+        <Drawer
+          title="Categories"
+          placement="left"
+          closable={false}
+          onClose={onClose}
+          visible={isDrawerVisible}
+          bodyStyle={{ backgroundColor: "#f5f5f5" }}
+        >
+          <Menu>
+            {categories.map((category) => (
+              <Menu.Item key={category}>
+                <Link href={`/search?query=${category}`}>
+                  <span style={{ display: "block" }}>{category}</span>
+                </Link>
+              </Menu.Item>
+            ))}
+          </Menu>
+        </Drawer>
+      </div>
+    );
   };
 
   return (
@@ -77,22 +108,11 @@ export default function Layout({ title, children }) {
         <header>
           <nav className="flex h-12 items-center px-4 justify-between shadow-md">
 
-            <div
-              className="cursor-pointer px-4  "
-              onClick={() => setShowSidebar(!showSidebar)}
-            >
-              <AiOutlineMenu
-                edge="start"
-                aria-label="open drawer"
-                onClick={toggle}
-              // className={classes.menuButton}
-              >
-                {/* <MenuIcon className={classes.navbarButton} /> */}
-              </AiOutlineMenu>
-              {/* <MenuIcon className="h-5 w-5 text-blue-500"></MenuIcon> */}
-              {/* <AiOutlineMenu className="h-5 w-5 text-blue-500" /> */}
-
+            <div>
+              {ToggleButton}
+              {/* <AiOutlineMenu onClick={ToggleButton}> </AiOutlineMenu> */}
             </div>
+            <ToggleButton />
 
             <AiOutlineAntDesign color="red" />
 
@@ -187,7 +207,20 @@ export default function Layout({ title, children }) {
                   Login
                 </Link>
               )}
+
+
             </div>
+            {/* <Drawer
+              title="Categories"
+              placement="left"
+              closable={false}
+              onClose={() => setIsOpen(!isOpen)}
+              visible={toggle}
+            >
+              {fetchCategories && fetchCategories.map((category) => (
+                <Menu.Item key={category.id}>{category.name}</Menu.Item>
+              ))}
+            </Drawer> */}
           </nav>
         </header>
         <main className="container m-auto mt-4 px-4">{children}</main>
