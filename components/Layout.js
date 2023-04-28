@@ -77,7 +77,7 @@ export default function Layout({ title, children }) {
           placement="left"
           closable={false}
           onClose={onClose}
-          visible={isDrawerVisible}
+          open={isDrawerVisible}
           bodyStyle={{ backgroundColor: "#f5f5f5" }}
         >
           <Menu>

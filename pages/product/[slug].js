@@ -16,6 +16,7 @@ export default function ProductScreen(props) {
   const { product } = props;
   const { state, dispatch } = useContext(Store);
   const [currentImage, setCurrentImage] = useState(product.image)
+  // eslint-disable-next-line no-unused-vars
   const [reviews, setReviews] = useState([]);
   const productId = product._id
 
