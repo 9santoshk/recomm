@@ -10,7 +10,7 @@ import db from '../../utils/db';
 import { Store } from '../../utils/Store';
 // import IoChevronBackOutline from 'react-icons/io'
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
-// import Rating from 'react-star-rating-component';
+import Rating from 'react-star-rating-component';
 
 export default function ProductScreen(props) {
   const { product } = props;
