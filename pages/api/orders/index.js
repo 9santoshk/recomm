@@ -13,7 +13,7 @@ const handler = async (req, res) => {
     ...req.body,
     user: user._id,
   });
-  console.log('odr summ', newOrder)
+  // console.log('odr summ', newOrder)
 
   const order = await newOrder.save();
   res.status(201).send(order);

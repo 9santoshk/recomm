@@ -22,7 +22,7 @@ function reducer(state, action) {
         )
         : [...state.cart.cartItems, newItem];
       Cookies.set('cart', JSON.stringify({ ...state.cart, cartItems }));
-      console.log(cartItems)
+      // console.log(cartItems)
       return { ...state, cart: { ...state.cart, cartItems } };
     }
     case 'CART_REMOVE_ITEM': {

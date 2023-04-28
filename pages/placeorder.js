@@ -46,7 +46,7 @@ export default function PlaceOrderScreen() {
         taxPrice,
         totalPrice,
       });
-      console.log('order', cartItems)
+      // console.log('order', cartItems)
 
       setLoading(false);
       dispatch({ type: 'CART_CLEAR_ITEMS' });

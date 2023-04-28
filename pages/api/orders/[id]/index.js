@@ -4,7 +4,7 @@ import Order from '../../../../models/Order';
 import db from '../../../../utils/db';
 
 const handler = async (req, res) => {
-  console.log('odr summ', req)
+  // console.log('odr summ', req)
 
   const user = await getToken({ req });
   if (!user) {

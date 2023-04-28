@@ -1,7 +1,7 @@
 import { signOut, useSession } from 'next-auth/react';
 import Head from 'next/head';
 import Link from 'next/link';
-import { Button, Drawer } from 'antd';
+import { Drawer } from 'antd';
 import Cookies from 'js-cookie';
 import React, { useContext, useEffect, useState } from 'react';
 import { toast, ToastContainer } from 'react-toastify';
@@ -60,7 +60,7 @@ export default function Layout({ title, children }) {
     try {
       const { data } = await axios.get(`/api/products/categories`);
       setCategories(data);
-      console.log(data)
+      // console.log(data)
     } catch (err) {
       toast.error(getError(err));
     }
