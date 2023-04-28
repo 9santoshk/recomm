@@ -52,7 +52,7 @@ export default function LoginScreen() {
 
   return (
     <Layout title="Login">
-      {/* <form
+      <form
         className="mx-auto max-w-screen-md"
       // onSubmit={handleSubmit(submitHandler)}
       >
@@ -97,7 +97,7 @@ export default function LoginScreen() {
             onClick={handleSubmit(submitHandler)}
           > Login </button>
         </div>
-      </form> */}
+      </form>
       <p >
 
         Get started by signing in   {"       "}

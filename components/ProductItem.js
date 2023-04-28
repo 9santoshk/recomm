@@ -1,9 +1,12 @@
 /* eslint-disable @next/next/no-img-element */
+import { Rating } from '@mui/material';
 import Link from 'next/link';
 import React from 'react';
 
 export default function ProductItem({ product, addToCartHandler }) {
+  // console.log(product)
   return (
+
     <div className="card">
       <Link href={`/product/${product.slug}`}>
         <img
@@ -17,6 +20,14 @@ export default function ProductItem({ product, addToCartHandler }) {
           <h2 className="text-lg">{product.name}</h2>
         </Link>
         <p className="mb-2">{product.brand}</p>
+        <Rating
+          value={product.rating}
+          // onStarClick={(nextValue, prevValue, name) => handleStarClick(nextValue, prevValue, name)}
+          starCount={5}
+          starColor={'#ffb400'}
+          emptyStarColor={'#ccc'}
+        />
+
         <p>${product.price}</p>
         <button
           className="primary-button"

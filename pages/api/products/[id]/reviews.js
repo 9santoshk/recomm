@@ -14,6 +14,17 @@ const getHandler = async (req, res) => {
     }
 };
 
+const getReviews = async (req) => {
+    await db.connect();
+    const product = await Product.findById(req.query.id);
+    await db.disconnect();
+    if (product) {
+        return product.reviews;
+    } else {
+        return [];
+    }
+};
+
 const postHandler = async (req, res, user) => {
     await db.connect();
     const product = await Product.findById(req.query.id);
