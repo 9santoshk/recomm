@@ -6,7 +6,7 @@ import Layout from '../components/Layout';
 import { getError } from '../utils/error';
 import { toast } from 'react-toastify';
 import { useRouter } from 'next/router';
-import Google from 'next-auth/providers/google';
+// import Google from 'next-auth/providers/google';
 
 export default function LoginScreen() {
   const { data: session } = useSession();
