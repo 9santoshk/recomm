@@ -26,6 +26,7 @@ export default function LoginScreen() {
     getValues,
     formState: { errors },
   } = useForm();
+
   const submitHandler = async ({ name, email, password }) => {
     try {
       await axios.post('/api/auth/signup', {
