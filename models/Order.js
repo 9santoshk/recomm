@@ -28,6 +28,7 @@ const orderSchema = new mongoose.Schema(
     isDelivered: { type: Boolean, required: true, default: false },
     paidAt: { type: Date },
     deliveredAt: { type: Date },
+    isCancelled: { type: Boolean },
   },
   {
     timestamps: true,

@@ -4,11 +4,11 @@ import db from '../../../../utils/db';
 
 const handler = async (req, res) => {
   const user = await getToken({ req });
-  if (!user || !user.isAdmin) {
-    return res.status(401).send('admin signin required');
+  if (!user || !user.isMerchant) {
+    return res.status(401).send('merchant signin required');
   }
   if (req.method === 'GET') {
-    return getHandler(req, res);
+    return getHandler(req, res, user);
   } else if (req.method === 'POST') {
     return postHandler(req, res, user);
   } else {
@@ -17,16 +17,15 @@ const handler = async (req, res) => {
 };
 const postHandler = async (req, res, user) => {
   await db.connect();
-  const { name, slug, image, price, category, brand, countInStock, description } = req.body;
   const newProduct = new Product({
-    name: name || 'sample name',
-    slug: slug || 'sample-name-' + Math.random(),
-    image: image || '/images/shirt1.jpg',
-    price: price || 0,
-    category: category || 'sample category',
-    brand: brand || 'sample brand',
-    countInStock: countInStock || 0,
-    description: description || 'sample description',
+    name: 'sample name',
+    slug: 'sample-name-' + Math.random(),
+    image: '/images/shirt1.jpg',
+    price: 0,
+    category: 'sample category',
+    brand: 'sample brand',
+    countInStock: 0,
+    description: 'sample description',
     rating: 0,
     numReviews: 0,
     merchantEmail: user.email,
@@ -36,9 +35,9 @@ const postHandler = async (req, res, user) => {
   await db.disconnect();
   res.send({ message: 'Product created successfully', product });
 };
-const getHandler = async (req, res) => {
+const getHandler = async (req, res, user) => {
   await db.connect();
-  const products = await Product.find({});
+  const products = await Product.find({ merchantEmail: user.email });
   await db.disconnect();
   res.send(products);
 };

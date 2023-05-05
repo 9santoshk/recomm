@@ -5,7 +5,6 @@ import React, { useEffect, useReducer } from 'react';
 import { toast } from 'react-toastify';
 import Layout from '../../components/Layout';
 import { getError } from '../../utils/error';
-// import AdminNewProductScreen from './newProduct';
 
 function reducer(state, action) {
   switch (action.type) {
@@ -34,7 +33,7 @@ function reducer(state, action) {
       state;
   }
 }
-export default function AdminProdcutsScreen() {
+export default function MerchantProdcutsScreen() {
   const router = useRouter();
 
   const [
@@ -52,10 +51,10 @@ export default function AdminProdcutsScreen() {
     }
     try {
       dispatch({ type: 'CREATE_REQUEST' });
-      const { data } = await axios.post(`/api/admin/products`);
+      const { data } = await axios.post(`/api/merchant/products`);
       dispatch({ type: 'CREATE_SUCCESS' });
       toast.success('Product created successfully');
-      router.push(`/admin/product/${data.product._id}`);
+      router.push(`/merchant/product/${data.product._id}`);
     } catch (err) {
       dispatch({ type: 'CREATE_FAIL' });
       toast.error(getError(err));
@@ -65,7 +64,7 @@ export default function AdminProdcutsScreen() {
     const fetchData = async () => {
       try {
         dispatch({ type: 'FETCH_REQUEST' });
-        const { data } = await axios.get(`/api/admin/products`);
+        const { data } = await axios.get(`/api/merchant/products`);
         dispatch({ type: 'FETCH_SUCCESS', payload: data });
       } catch (err) {
         dispatch({ type: 'FETCH_FAIL', payload: getError(err) });
@@ -85,7 +84,7 @@ export default function AdminProdcutsScreen() {
     }
     try {
       dispatch({ type: 'DELETE_REQUEST' });
-      await axios.delete(`/api/admin/products/${productId}`);
+      await axios.delete(`/api/merchant/products/${productId}`);
       dispatch({ type: 'DELETE_SUCCESS' });
       toast.success('Product deleted successfully');
     } catch (err) {
@@ -94,23 +93,20 @@ export default function AdminProdcutsScreen() {
     }
   };
   return (
-    <Layout title="Admin Products">
+    <Layout title="Merchant Products">
       <div className="grid md:grid-cols-4 md:gap-5">
         <div>
           <ul>
             <li>
-              <Link href="/admin/dashboard">Dashboard</Link>
+              <Link href="/merchant/dashboard">Dashboard</Link>
             </li>
             <li>
-              <Link href="/admin/orders">Orders</Link>
+              <Link href="/merchant/orders">Orders</Link>
             </li>
             <li>
-              <Link href="/admin/products" className="font-bold">
+              <Link href="/merchant/products" className="font-bold">
                 Products
               </Link>
-            </li>
-            <li>
-              <Link href="/admin/users">Users</Link>
             </li>
           </ul>
         </div>
@@ -121,7 +117,6 @@ export default function AdminProdcutsScreen() {
             <button
               disabled={loadingCreate}
               onClick={createHandler}
-              // onClick={() => router.push('/admin/newProduct')}
               className="primary-button"
             >
               {loadingCreate ? 'Loading' : 'Create'}
@@ -156,7 +151,7 @@ export default function AdminProdcutsScreen() {
                       <td className=" p-5 ">{product.rating}</td>
                       <td className=" p-5 ">
                         <Link
-                          href={`/admin/product/${product._id}`}
+                          href={`/merchant/product/${product._id}`}
                           type="button"
                           className="default-button"
                         >
@@ -183,4 +178,4 @@ export default function AdminProdcutsScreen() {
   );
 }
 
-AdminProdcutsScreen.auth = { adminOnly: true };
+MerchantProdcutsScreen.auth = { MerchantOnly: true };

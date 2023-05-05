@@ -38,7 +38,7 @@ function reducer(state, action) {
       return state;
   }
 }
-export default function AdminProductEditScreen() {
+export default function MerchantProductEditScreen() {
   const { query } = useRouter();
   const productId = query.id;
   const [{ loading, error, loadingUpdate, loadingUpload }, dispatch] =
@@ -58,7 +58,7 @@ export default function AdminProductEditScreen() {
     const fetchData = async () => {
       try {
         dispatch({ type: 'FETCH_REQUEST' });
-        const { data } = await axios.get(`/api/admin/products/${productId}`);
+        const { data } = await axios.get(`/api/merchant/products/${productId}`);
         dispatch({ type: 'FETCH_SUCCESS' });
         setValue('name', data.name);
         setValue('slug', data.slug);
@@ -85,7 +85,7 @@ export default function AdminProductEditScreen() {
       dispatch({ type: 'UPLOAD_REQUEST' });
       const {
         data: { signature, timestamp },
-      } = await axios('/api/admin/cloudinary-sign');
+      } = await axios('/api/merchant/cloudinary-sign');
 
       const file = e.target.files[0];
       const formData = new FormData();
@@ -116,7 +116,7 @@ export default function AdminProductEditScreen() {
   }) => {
     try {
       dispatch({ type: 'UPDATE_REQUEST' });
-      await axios.put(`/api/admin/products/${productId}`, {
+      await axios.put(`/api/merchant/products/${productId}`, {
         name,
         slug,
         price,
@@ -129,7 +129,7 @@ export default function AdminProductEditScreen() {
       });
       dispatch({ type: 'UPDATE_SUCCESS' });
       toast.success('Product updated successfully');
-      router.push('/admin/products');
+      router.push('/merchant/products');
     } catch (err) {
       dispatch({ type: 'UPDATE_FAIL', payload: getError(err) });
       toast.error(getError(err));
@@ -142,18 +142,15 @@ export default function AdminProductEditScreen() {
         <div>
           <ul>
             <li>
-              <Link href="/admin/dashboard">Dashboard</Link>
+              <Link href="/merchant/dashboard">Dashboard</Link>
             </li>
             <li>
-              <Link href="/admin/orders">Orders</Link>
+              <Link href="/merchant/orders">Orders</Link>
             </li>
             <li>
-              <Link href="/admin/products" className="font-bold">
+              <Link href="/merchant/products" className="font-bold">
                 Products
               </Link>
-            </li>
-            <li>
-              <Link href="/admin/users">Users</Link>
             </li>
           </ul>
         </div>
@@ -297,12 +294,23 @@ export default function AdminProductEditScreen() {
                 )}
               </div>
               <div className="mb-4">
+                <label htmlFor="countInStock">merchantEmail</label>
+                <input
+                  type="text"
+                  className="w-full"
+                  id="merchantEmail"
+                  {...register('merchantEmail', {
+                    required: 'Please enter merchantEmail',
+                  })}
+                />
+              </div>
+              <div className="mb-4">
                 <button disabled={loadingUpdate} className="primary-button">
                   {loadingUpdate ? 'Loading' : 'Update'}
                 </button>
               </div>
               <div className="mb-4">
-                <Link href={`/admin/products`}>Back</Link>
+                <Link href={`/merchant/products`}>Back</Link>
               </div>
             </form>
           )}
@@ -312,4 +320,4 @@ export default function AdminProductEditScreen() {
   );
 }
 
-AdminProductEditScreen.auth = { adminOnly: true };
+MerchantProductEditScreen.auth = { merchantOnly: true };

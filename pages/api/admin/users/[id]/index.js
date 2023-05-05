@@ -33,7 +33,9 @@ const putHandler = async (req, res) => {
   if (user) {
     user.name = req.body.name;
     user.slug = req.body.email;
-    user.price = req.body.isAdmin;
+    user.isAdmin = req.body.isAdmin;
+    user.isActiveUser = req.body.isActiveUser;
+    user.userType = req.body.userType;
     await user.save();
     await db.disconnect();
     res.send({ message: 'User updated successfully' });

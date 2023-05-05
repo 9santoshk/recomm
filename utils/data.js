@@ -5,16 +5,29 @@ const data = {
     {
       name: 'John',
       email: 'admin@example.com',
-      password: bcrypt.hashSync('123456'),
+      password: bcrypt.hashSync('123#456'),
       isAdmin: true,
-      // isMerchant: true,
+      userType: 'Admin',
+      isActiveUser: true,
+      // channel: 'direct',
+    },
+    {
+      name: 'Agent',
+      email: 'merchant@example.com',
+      password: bcrypt.hashSync('123#456'),
+      isAdmin: false,
+      userType: 'Merchant',
+      isActiveUser: true,
+      // channel: 'local',
     },
     {
       name: 'Jane',
       email: 'user@example.com',
-      password: bcrypt.hashSync('123456'),
+      password: bcrypt.hashSync('123#456'),
       isAdmin: false,
-      // isMerchant: true,
+      userType: 'Normal',
+      isActiveUser: true,
+      // channel: 'local',
     },
   ],
   products: [
@@ -32,6 +45,8 @@ const data = {
       description: 'A popular shirt',
       isFeatured: true,
       banner: '/images/banner1.jpg',
+      merchantEmail: 'merchant@example.com',
+      isActiveProduct: true,
     },
     {
       name: 'Fit Shirt',
@@ -47,6 +62,8 @@ const data = {
       description: 'A popular shirt',
       isFeatured: true,
       banner: '/images/banner2.jpg',
+      merchantEmail: 'merchant@example.com',
+      isActiveProduct: true,
     },
     {
       name: 'Slim Shirt',
@@ -60,6 +77,8 @@ const data = {
       numReviews: 3,
       countInStock: 20,
       description: 'A popular shirt',
+      merchantEmail: 'merchant@example.com',
+      isActiveProduct: true,
     },
     {
       name: 'Golf Pants',
@@ -73,6 +92,8 @@ const data = {
       numReviews: 13,
       countInStock: 20,
       description: 'Smart looking pants',
+      merchantEmail: 'merchant@example.com',
+      isActiveProduct: true,
     },
     {
       name: 'Fit Pants',
@@ -86,6 +107,8 @@ const data = {
       numReviews: 7,
       countInStock: 20,
       description: 'A popular pants',
+      merchantEmail: 'merchant@example.com',
+      isActiveProduct: true,
     },
     {
       name: 'Classic Pants',
@@ -99,6 +122,8 @@ const data = {
       numReviews: 14,
       countInStock: 20,
       description: 'A popular pants',
+      merchantEmail: 'merchant@example.com',
+      isActiveProduct: true,
     },
   ],
 };

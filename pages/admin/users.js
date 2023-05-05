@@ -114,6 +114,7 @@ function AdminUsersScreen() {
                       <td className=" p-5 ">{user.name}</td>
                       <td className=" p-5 ">{user.email}</td>
                       <td className=" p-5 ">{user.isAdmin ? 'YES' : 'NO'}</td>
+                      <td className=" p-5 ">{user.isMerchant ? 'YES' : 'NO'}</td>
                       <td className=" p-5 ">
                         <Link
                           href={`/admin/user/${user._id}`}

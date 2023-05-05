@@ -13,14 +13,42 @@ export default NextAuth({
     strategy: 'jwt',
   },
   callbacks: {
+    async signIn(session) {
+      // Check if the user already exists in your database
+      await db.connect();
+      const existingUser = await User.findOne({ email: session.user.email });
+      await db.disconnect();
+      // If the user does not exist, create a new user record
+      if (!existingUser) {
+        console.log('exist', existingUser)
+        const newUser = new User({
+          name: session.user.name,
+          email: session.user.email,
+          password: await bcryptjs.hash('123#456', 8),
+          image: session.user.image,
+          isAdmin: false,
+          userType: 'Normal',
+          isActiveUser: true,
+        });
+        await db.connect();
+        await newUser.save();
+        await db.disconnect();
+      }
+      return session;
+    },
+
     async jwt({ token, user }) {
       if (user?._id) token._id = user._id;
       if (user?.isAdmin) token.isAdmin = user.isAdmin;
+      if (user?.isActiveUser) token.isActiveUser = user.isActiveUser;
+      if (user?.userType === 'Merchant') token.userType = 'Merchant';
       return token;
     },
     async session({ session, token }) {
       if (token?._id) session.user._id = token._id;
       if (token?.isAdmin) session.user.isAdmin = token.isAdmin;
+      if (token?.isActiveUser) session.user.isActiveUser = token.isActiveUser;
+      if (token?.userType === 'Merchant') session.user.userType = 'Merchant';
       return session;
     },
   },
@@ -39,6 +67,8 @@ export default NextAuth({
             email: user.email,
             image: 'f',
             isAdmin: user.isAdmin,
+            userType: user.userType,
+            isActiveUser: user.isActiveUser,
           };
         }
         throw new Error('Invalid email or password');

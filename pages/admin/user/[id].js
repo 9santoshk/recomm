@@ -64,7 +64,9 @@ export default function AdminUserEditScreen() {
                 dispatch({ type: 'FETCH_SUCCESS' });
                 setValue('name', data.name);
                 setValue('email', data.email);
-                setValue('isAdmin', data.price);
+                setValue('isAdmin', data.isAdmin);
+                setValue('userType', data.userType);
+                setValue('isActiveUser', data.isActiveUser);
             } catch (err) {
                 dispatch({ type: 'FETCH_FAIL', payload: getError(err) });
             }
@@ -80,6 +82,8 @@ export default function AdminUserEditScreen() {
         name,
         email,
         isAdmin,
+        userType,
+        isActiveUser,
     }) => {
         try {
             dispatch({ type: 'UPDATE_REQUEST' });
@@ -87,6 +91,8 @@ export default function AdminUserEditScreen() {
                 name,
                 email,
                 isAdmin,
+                userType,
+                isActiveUser,
             });
             dispatch({ type: 'UPDATE_SUCCESS' });
             toast.success('User updated successfully');
@@ -112,6 +118,10 @@ export default function AdminUserEditScreen() {
                             <Link href="/admin/products" className="font-bold">
                                 Products
                             </Link>
+                        </li>
+                        <li>
+                            <Link href="/admin/merchants">Users</Link>
+
                         </li>
                         <li>
                             <Link href="/admin/users">Users</Link>
@@ -161,16 +171,56 @@ export default function AdminUserEditScreen() {
                             </div>
                             <div className="mb-4">
                                 <label htmlFor="isAdmin">IsAdmin</label>
-                                <input
-                                    type="text"
-                                    className="w-full"
+                                <select
                                     id="isAdmin"
+                                    className="w-full"
                                     {...register('isAdmin', {
-                                        required: 'Please enter iSAdmin',
+                                        required: 'Please enter isAdmin',
                                     })}
-                                />
+                                >
+                                    <option value="">Select</option>
+                                    <option value="true">Yes</option>
+                                    <option value="false">No</option>
+                                </select>
+
                                 {errors.isAdmin && (
                                     <div className="text-red-500">{errors.isAdmin.message}</div>
+                                )}
+                            </div>
+                            <div className="mb-4">
+                                <label htmlFor="userType">userType</label>
+                                <select
+                                    id="userType"
+                                    className="w-full"
+                                    {...register('userType', {
+                                        required: 'Please select userType',
+                                    })}
+                                >
+                                    <option value="">Select</option>
+                                    <option value="Normal">Normal</option>
+                                    <option value="Merchant">Merchant</option>
+                                    <option value="Admin">Admin</option>
+                                </select>
+                                {errors.userType && (
+                                    <div className="text-red-500">{errors.userType.message}</div>
+                                )}
+                            </div>
+
+                            <div className="mb-4">
+                                <label htmlFor="isActiveUser">isActiveUser</label>
+                                <select
+                                    id="isActiveUser"
+                                    className="w-full"
+                                    {...register('isActiveUser', {
+                                        required: 'Please select isActiveUser',
+                                    })}
+                                >
+                                    <option value="">Select</option>
+                                    <option value="true">Yes</option>
+                                    <option value="false">No</option>
+                                </select>
+                                {errors.isActiveUser && (
+                                    <div className="text-red-500">{errors.isActiveUser.message}</div>
                                 )}
                             </div>
                             <div className="mb-4">

@@ -1,16 +1,17 @@
 import Link from 'next/link';
 import React, { useEffect } from 'react';
-import { getProviders, signIn, useSession } from 'next-auth/react';
+import { signIn, useSession } from 'next-auth/react';
 import { useForm } from 'react-hook-form';
 import Layout from '../components/Layout';
 import { getError } from '../utils/error';
 import { toast } from 'react-toastify';
 import { useRouter } from 'next/router';
+import Image from 'next/image';
 // import Google from 'next-auth/providers/google';
 
 export default function LoginScreen() {
   const { data: session } = useSession();
-
+  // console.log(session)
   const router = useRouter();
   const { redirect } = router.query;
 
@@ -36,15 +37,6 @@ export default function LoginScreen() {
       if (result.error) {
         toast.error(result.error);
       }
-    } catch (err) {
-      toast.error(getError(err));
-    }
-  };
-  const handleGoogleSignIn = async () => {
-    try {
-      const providers = await getProviders();
-      const googleProvider = providers['google'];
-      await signIn(googleProvider.id, { callbackUrl: '/' });
     } catch (err) {
       toast.error(getError(err));
     }
@@ -103,11 +95,9 @@ export default function LoginScreen() {
         Get started by signing in   {"       "}
         {/* <code >with your Google Account</code> */}
         <button
-          onClick={handleGoogleSignIn}
+          onClick={() => signIn('google')}
         // onClick={() => router.push('/Login')}
-        >
-          <img src="/glog.png"
-          />
+        ><span>           <Image src="/glog.png" alt="Google logo" width={25} height={25} />        </span>
         </button>
       </p>
 

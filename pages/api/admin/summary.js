@@ -14,6 +14,7 @@ const handler = async (req, res) => {
 
   const ordersCount = await Order.countDocuments();
   const productsCount = await Product.countDocuments();
+  const merchantsCount = await User.countDocuments();
   const usersCount = await User.countDocuments();
 
   const ordersPriceGroup = await Order.aggregate([
@@ -37,7 +38,7 @@ const handler = async (req, res) => {
   ]);
 
   await db.disconnect();
-  res.send({ ordersCount, productsCount, usersCount, ordersPrice, salesData });
+  res.send({ ordersCount, merchantsCount, productsCount, usersCount, ordersPrice, salesData });
 };
 
 export default handler;

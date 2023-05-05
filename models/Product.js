@@ -15,6 +15,8 @@ const productSchema = new mongoose.Schema(
     description: { type: String, required: true },
     isFeatured: { type: Boolean, default: false },
     banner: String,
+    merchantEmail: { type: String, required: true, unique: false },
+    isActiveProduct: { type: Boolean, required: true, unique: false, default: false },
   },
   {
     timestamps: true,

@@ -23,9 +23,9 @@ export default function ProductItem({ product, addToCartHandler }) {
         <Rating
           value={product.rating}
           // onStarClick={(nextValue, prevValue, name) => handleStarClick(nextValue, prevValue, name)}
-          starCount={5}
-          starColor={'#ffb400'}
-          emptyStarColor={'#ccc'}
+          starcount={5}
+          starcolor={'#ffb400'}
+          emptystarcolor={'#ccc'}
         />
 
         <p>${product.price}</p>

@@ -6,6 +6,9 @@ const userSchema = new mongoose.Schema(
     email: { type: String, required: true, unique: true },
     password: { type: String, required: true },
     isAdmin: { type: Boolean, required: true, default: false },
+    userType: { type: String, required: true, default: 'normal' },
+    isActiveUser: { type: Boolean, required: true, unique: false, default: true },
+    // channel: { type: String, required: true, unique: false, default: 'direct' },
   },
   {
     timestamps: true,

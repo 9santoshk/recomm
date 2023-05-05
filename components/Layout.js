@@ -1,4 +1,4 @@
-import { signOut, useSession } from 'next-auth/react';
+import { signIn, signOut, useSession } from 'next-auth/react';
 import Head from 'next/head';
 import Link from 'next/link';
 import { Drawer } from 'antd';
@@ -11,9 +11,13 @@ import { Store } from '../utils/Store';
 import DropdownLink from './DropdownLink';
 import { useRouter } from 'next/router';
 // import SearchIcon from '@heroicons/react/24/outline/MagnifyingGlassIcon';
-import { AiOutlineSearch, AiOutlineMenu, AiOutlineAntDesign, AiOutlineShoppingCart } from 'react-icons/ai'
+import { AiOutlineSearch, AiOutlineMenu, AiOutlineAntDesign, AiOutlineShoppingCart, AiOutlineClose } from 'react-icons/ai'
 import axios from 'axios';
 import { getError } from '../utils/error';
+import Image from 'next/image';
+import { VscAccount } from 'react-icons/vsc'
+// import { MenuItem } from '@mui/material';
+// import Image from 'next/image';
 
 export default function Layout({ title, children }) {
   const { status, data: session } = useSession();
@@ -24,6 +28,17 @@ export default function Layout({ title, children }) {
   const [isDrawerVisible, setIsDrawerVisible] = useState(false); // Add state to manage drawer visibility
   const router = useRouter();
 
+  const { redirect } = router.query;
+
+  useEffect(() => {
+    if (session?.user) {
+      router.push;
+      // (redirect || '/');
+    }
+  }, [router, session, redirect]);
+
+
+  // console.log(session)
 
   const showDrawer = () => {
     setIsDrawerVisible(true);
@@ -40,7 +55,8 @@ export default function Layout({ title, children }) {
   const logoutClickHandler = () => {
     Cookies.remove('cart');
     dispatch({ type: 'CART_RESET' });
-    signOut({ callbackUrl: '/login' });
+    // signOut({ callbackUrl: '/login' });
+    signOut({ callbackUrl: '/' });
   };
 
   const [query, setQuery] = useState('');
@@ -50,6 +66,7 @@ export default function Layout({ title, children }) {
     e.preventDefault();
     router.push(`/search?query=${query}`);
   };
+
   useEffect(() => {
     fetchCategories();
   }, []);
@@ -66,6 +83,30 @@ export default function Layout({ title, children }) {
     }
   };
 
+  const handleGoogleSignIn = async () => {
+
+    try {
+      // const providers = await getProviders();
+      // const googleProvider = providers['google'];
+      const response = await signIn('google', { callbackUrl: '/' });
+      console.log(session)
+      if (response.error) {
+        toast.error(response.error);
+      } else {
+        // console.log(response);
+        const { accessToken, expires, user } = response;
+        const decodedToken = JSON.parse(
+          Buffer.from(accessToken.split('.')[1], 'base64').toString('ascii')
+        );
+        console.log('Decoded token:', decodedToken);
+        console.log('Expires:', expires);
+        console.log('User:', user);
+      }
+    } catch (err) {
+      toast.error(getError(err));
+    }
+  };
+
 
   const ToggleButton = () => {
     // console.log(categories)
@@ -75,11 +116,18 @@ export default function Layout({ title, children }) {
         <Drawer
           title="Categories"
           placement="left"
-          closable={false}
+          closable={true}
           onClose={onClose}
           open={isDrawerVisible}
           bodyStyle={{ backgroundColor: "#f5f5f5" }}
-        >
+          header={
+            <div>
+              <h3 style={{ margin: 0 }}>Categories</h3>
+              <button onClick={onClose}>
+                <AiOutlineClose />
+              </button>
+            </div>
+          }        >
           <Menu>
             {categories.map((category) => (
               <Menu.Item key={category}>
@@ -90,7 +138,7 @@ export default function Layout({ title, children }) {
             ))}
           </Menu>
         </Drawer>
-      </div>
+      </div >
     );
   };
 
@@ -109,7 +157,7 @@ export default function Layout({ title, children }) {
           <nav className="flex h-12 items-center px-4 justify-between shadow-md">
 
             <div>
-              {ToggleButton}
+              {/* {ToggleButton()} */}
               {/* <AiOutlineMenu onClick={ToggleButton}> </AiOutlineMenu> */}
             </div>
             <ToggleButton />
@@ -137,12 +185,12 @@ export default function Layout({ title, children }) {
                 <AiOutlineSearch className="h-5 w-5"></AiOutlineSearch>
               </button>
             </form>
-            <div className="flex items-center z-10">
+            {/* <div className="flex items-center z-10">
               <Link href="/about" className="p-2">
                 About Us
               </Link>
-            </div>
-            <div className="horizontal-item">|</div>
+            </div> */}
+            {/* <div className="horizontal-item">|</div> */}
 
 
             <div className="flex items-center z-10">
@@ -156,15 +204,16 @@ export default function Layout({ title, children }) {
                   </span>
                 )}
               </Link>
-              <div className="horizontal-item">|</div>
+              {/* <div className="horizontal-item">|</div> */}
 
               {status === 'loading' ? (
                 'Loading'
               ) : session?.user ? (
                 <Menu as="div" className="relative inline-block">
                   <Menu.Button className="text-blue-600">
+                    {/* <dive> <Image src={session.user.image} alt="" width={10} height={10} /></dive> */}
                     {session.user.name}
-                    <AiOutlineMenu />
+                    {/* <VscAccount /> */}
 
                   </Menu.Button>
                   <Menu.Items className="absolute right-0 w-56 origin-top-right bg-white  shadow-lg ">
@@ -191,6 +240,17 @@ export default function Layout({ title, children }) {
                         </DropdownLink>
                       </Menu.Item>
                     )}
+                    {session.user.userType === 'Merchant' && (
+                      <Menu.Item>
+                        <DropdownLink
+                          className="dropdown-link"
+                          href="/merchant/dashboard"
+                        >
+                          Merchant Dashboard
+                        </DropdownLink>
+                      </Menu.Item>
+                    )}
+
                     <Menu.Item>
                       <a
                         className="dropdown-link"
@@ -203,24 +263,46 @@ export default function Layout({ title, children }) {
                   </Menu.Items>
                 </Menu>
               ) : (
-                <Link href="/login" className="p-2">
-                  Login
-                </Link>
+                <Menu as="div" className="relative inline-block">
+                  <div className="flex items-center z-10">
+                    <Menu.Button className="text-blue-600">
+                      {/* <dive> <Image src={session.user.image} alt="" width={10} height={10} /></dive> */}
+                      <VscAccount />
+                      {/* Menu */}
+                    </Menu.Button>
+                  </div>
+                  <Menu.Items className="absolute right-0 w-56 origin-top-right bg-white  shadow-lg ">
+                    <Menu.Item>
+                      <DropdownLink className="dropdown-link" href="/">
+                        <button
+                          // onClick={() => signIn('google', { callbackUrl: '/' })}
+                          onClick={handleGoogleSignIn}
+                        // onClick={() => router.push('/Login')}
+                        ><span>
+                            <Image src="/glog.png" alt="Google logo" width={20} height={20} />
+                          </span>
+                        </button>
+                      </DropdownLink>
+                    </Menu.Item>
+                    <Menu.Item>
+                      <DropdownLink className="dropdown-link" href="/">
+                        About
+                      </DropdownLink>
+                    </Menu.Item>
+                    <Menu.Item>
+                      <DropdownLink className="dropdown-link" href="/login">
+                        Login
+                      </DropdownLink>
+                    </Menu.Item>
+                  </Menu.Items>
+                </Menu>
+                // <Link href="/login" className="p-2">
+                //   Login
+                // </Link>
               )}
 
 
             </div>
-            {/* <Drawer
-              title="Categories"
-              placement="left"
-              closable={false}
-              onClose={() => setIsOpen(!isOpen)}
-              visible={toggle}
-            >
-              {fetchCategories && fetchCategories.map((category) => (
-                <Menu.Item key={category.id}>{category.name}</Menu.Item>
-              ))}
-            </Drawer> */}
           </nav>
         </header>
         <main className="container m-auto mt-4 px-4">{children}</main>

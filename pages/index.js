@@ -29,6 +29,7 @@ export default function Home({ products, featuredProducts }) {
 
   return (
     <Layout title="Home Page">
+
       <Carousel showThumbs={false} autoPlay>
         {featuredProducts.map((product) => (
           <div key={product._id}>
@@ -56,6 +57,7 @@ export async function getServerSideProps() {
   await db.connect();
   const products = await Product.find().lean();
   const featuredProducts = await Product.find({ isFeatured: true }).lean();
+  // await db.disconnect();
   return {
     props: {
       featuredProducts: featuredProducts.map(db.convertDocToObj),
